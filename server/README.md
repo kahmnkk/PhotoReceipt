@@ -1,11 +1,10 @@
-# Nodejs Server-Kit
+# PhotoReceipt Server
 
-Nodejs server starter kit
+PhotoReceipt Server
 
 ## Includes
 
 -   express
--   socket-io
 -   mysql
 -   redis
 -   log service
