@@ -76,17 +76,17 @@ class RouterUser {
         const pw = reqDto[reqKeys.pw];
 
         const account = new Account();
-        const accResult = await account.getAccountInfoById(id);
-        if (accResult == null) {
+        const accInfo = await account.getAccountInfoById(id);
+        if (accInfo == null) {
             throw utils.errorHandling(errors.invalidAccountIdPw);
         }
 
-        const validPw = await account.validAccount(pw, accResult);
+        const validPw = await account.validAccount(pw, accInfo);
         if (validPw == false) {
             throw utils.errorHandling(errors.invalidAccountIdPw);
         }
 
-        const user = new User(accResult.user.idx);
+        const user = new User(accInfo.idx);
         const userInfo = await user.getUserInfo();
 
         rtn[resKeys.userInfo] = userInfo;
