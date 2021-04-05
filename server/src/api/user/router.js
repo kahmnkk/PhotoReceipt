@@ -35,7 +35,7 @@ class RouterUser {
 
         const validId = await account.validId(id);
         if (validId == false) {
-            throw utils.errorHandling(errors.invalidAccountId);
+            throw utils.errorHandling(errors.duplicatedAccountId);
         }
 
         const accResult = await account.createAccountInfo(id, pw);
@@ -54,6 +54,42 @@ class RouterUser {
         await dbMgr.multiSet([accQuery, userQuery]);
 
         rtn[resKeys.idx] = accResult.user.idx;
+
+        return rtn;
+    }
+
+    async login(reqDto) {
+        const reqKeys = {
+            id: 'id',
+            pw: 'pw',
+        };
+        const resKeys = {
+            userInfo: 'userInfo',
+        };
+        let rtn = {};
+
+        if (utils.hasKeys(reqKeys, reqDto) == false) {
+            throw utils.errorHandling(errors.invalidRequestData);
+        }
+
+        const id = reqDto[reqKeys.id];
+        const pw = reqDto[reqKeys.pw];
+
+        const account = new Account();
+        const accResult = await account.getAccountInfoById(id);
+        if (accResult == null) {
+            throw utils.errorHandling(errors.invalidAccountIdPw);
+        }
+
+        const validPw = await account.validAccount(pw, accResult);
+        if (validPw == false) {
+            throw utils.errorHandling(errors.invalidAccountIdPw);
+        }
+
+        const user = new User(accResult.user.idx);
+        const userInfo = await user.getUserInfo();
+
+        rtn[resKeys.userInfo] = userInfo;
 
         return rtn;
     }
