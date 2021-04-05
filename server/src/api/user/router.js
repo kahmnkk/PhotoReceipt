@@ -43,8 +43,15 @@ class RouterUser {
         const user = new User(accResult.user.idx);
         const userResult = await user.createUserInfo(nickname);
 
-        await dbMgr.set(dbMgr.mysqlConn.master, accResult.query);
-        await dbMgr.set(dbMgr.mysqlConn.user, userResult.query);
+        const accQuery = dbMgr.getMultiSetFrame();
+        accQuery.conn = dbMgr.mysqlConn.master;
+        accQuery.query = accResult.query;
+
+        const userQuery = dbMgr.getMultiSetFrame();
+        userQuery.conn = dbMgr.mysqlConn.user;
+        userQuery.query = userResult.query;
+
+        await dbMgr.multiSet([accQuery, userQuery]);
 
         rtn[resKeys.idx] = accResult.user.idx;
 
