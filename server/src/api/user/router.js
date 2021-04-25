@@ -64,7 +64,9 @@ class RouterUser {
             pw: 'pw',
         };
         const resKeys = {
-            userInfo: 'userInfo',
+            idx: 'idx',
+            nickname: 'nickname',
+            createTime: 'createTime',
         };
         let rtn = {};
 
@@ -89,7 +91,9 @@ class RouterUser {
         const user = new User(accInfo.idx);
         const userInfo = await user.getUserInfo();
 
-        rtn[resKeys.userInfo] = userInfo;
+        rtn[resKeys.idx] = userInfo.idx;
+        rtn[resKeys.nickname] = userInfo.nickname;
+        rtn[resKeys.createTime] = userInfo.createTime;
 
         return rtn;
     }
