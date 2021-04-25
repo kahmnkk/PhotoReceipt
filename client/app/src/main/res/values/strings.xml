@@ -3,4 +3,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_camera">Camera</string>
     <string name="title_community">Community</string>
+
+    <string name="base_url">http://3.21.35.164:8080/</string>
 </resources>
