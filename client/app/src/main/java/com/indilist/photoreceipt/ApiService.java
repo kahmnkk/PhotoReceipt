@@ -21,6 +21,6 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("user/index")
-    Call<ResponseDataDTO> userLogin(@Field("router") String router,
+    Call<JsonObject> userLogin(@Field("router") String router,
                                @Field("data") JsonObject data);
 }

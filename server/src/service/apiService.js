@@ -79,7 +79,7 @@ class ApiService {
                 error: err,
             };
             logger.error('[' + req['txid'] + '] res: ' + JSON.stringify(data));
-            res.send({ data: data });
+            res.send({ data });
         });
 
         this.app.set('port', this.port);

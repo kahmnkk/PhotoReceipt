@@ -5,4 +5,16 @@
     <string name="title_community">Community</string>
 
     <string name="base_url">http://3.21.35.164:8080/</string>
+
+    <!--  LoginActivity  -->
+    <string name="login_id">아이디</string>
+    <string name="login_pw">비밀번호</string>
+    <string name="login_btn">로그인</string>
+    <string name="login_join">회원가입</string>
+    <string name="join_nickname">닉네임</string>
+    <string name="join_pw_check">비밀번호 확인</string>
+
+    <!--  Error Message  -->
+    <string name="err_invalid_account">아이디 또는 비밀번호 오류</string>
+    <string name="err_duplicate_account">아이디 중복</string>
 </resources>

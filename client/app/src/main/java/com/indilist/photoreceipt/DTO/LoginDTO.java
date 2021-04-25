@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class LoginDTO {
     @SerializedName("idx")
     @Expose
-    private String idx;
+    private long idx;
     @SerializedName("nickname")
     @Expose
     private String nickname;
@@ -14,11 +14,11 @@ public class LoginDTO {
     @Expose
     private long createTime;
 
-    public String getIdx() {
+    public long getIdx() {
         return idx;
     }
 
-    public void setIdx(String idx) {
+    public void setIdx(long idx) {
         this.idx = idx;
     }
 

@@ -2,32 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/btn_join"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".JoinActivity">
 
     <EditText
-        android:id="@+id/login_id"
+        android:id="@+id/join_id"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:padding="5dp"
-        android:ems="10"
         android:background="#f2f2f2"
+        android:ems="10"
         android:hint="@string/login_id"
         android:inputType="text"
+        android:padding="5dp"
         android:textColor="#808080"
         android:textColorHint="#808080"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.395" />
+        app:layout_constraintVertical_bias="0.309" />
 
     <EditText
-        android:id="@+id/login_pw"
+        android:id="@+id/join_pw"
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:padding="5dp"
@@ -42,36 +41,59 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_id"
+        app:layout_constraintTop_toBottomOf="@+id/join_id"
         app:layout_constraintVertical_bias="0.037" />
 
+    <EditText
+        android:id="@+id/join_pw_check"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:background="#f2f2f2"
+        android:ems="10"
+        android:hint="@string/join_pw_check"
+        android:inputType="textPassword"
+        android:padding="5dp"
+        android:textColor="#808080"
+        android:textColorHint="#808080"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/join_pw"
+        app:layout_constraintVertical_bias="0.046" />
+
+    <EditText
+        android:id="@+id/join_nickname"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:background="#f2f2f2"
+        android:ems="10"
+        android:hint="@string/join_nickname"
+        android:inputType="text"
+        android:padding="5dp"
+        android:textColor="#808080"
+        android:textColorHint="#808080"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/join_pw_check"
+        app:layout_constraintVertical_bias="0.052" />
+
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_join"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:onClick="onClickBtnLogin"
-        android:text="@string/login_btn"
         android:backgroundTint="@color/purple_200"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_pw"
-        app:layout_constraintVertical_bias="0.089" />
-
-    <TextView
-        android:id="@+id/login_join"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickJoinText"
-        android:padding="5dp"
+        android:onClick="onClickBtnJoin"
         android:text="@string/login_join"
-        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/join_nickname"
+        app:layout_constraintVertical_bias="0.256" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
