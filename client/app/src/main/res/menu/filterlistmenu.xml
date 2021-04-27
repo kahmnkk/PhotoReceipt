@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/base"
+        android:title="base"
+        />
+    <item
+        android:id="@+id/grayscale"
+        android:title="grayscale"
+        />
+    <item
+        android:id="@+id/sepia"
+        android:title="@string/cameraview_filter_sepia"
+        />
+
+</menu>
