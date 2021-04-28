@@ -1,4 +1,4 @@
-# PhotoReceipt Server
+# PhotoRecipe Server
 
 PhotoReceipt Server
 

@@ -1,4 +1,4 @@
-# PhotoReceipt
+# PhotoRecipe
 
 Ajou Univ. (2021-1) Mobile Programming / Team Project
 
