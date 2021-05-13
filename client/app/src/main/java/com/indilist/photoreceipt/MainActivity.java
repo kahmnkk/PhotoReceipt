@@ -1,6 +1,8 @@
 package com.indilist.photoreceipt;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,4 +29,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    public void onClickBtnUpload(View v) {
+        Intent intent = new Intent(MainActivity.this, JoinActivity.class);
+        startActivity(intent);
+    }
 }

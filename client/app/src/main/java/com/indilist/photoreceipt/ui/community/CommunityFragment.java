@@ -1,5 +1,6 @@
 package com.indilist.photoreceipt.ui.community;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.indilist.photoreceipt.JoinActivity;
+import com.indilist.photoreceipt.LoginActivity;
+import com.indilist.photoreceipt.MainActivity;
 import com.indilist.photoreceipt.R;
 
 public class CommunityFragment extends Fragment {
@@ -22,14 +26,19 @@ public class CommunityFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         communityViewModel =
                 new ViewModelProvider(this).get(CommunityViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_community, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        communityViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        View view = inflater.inflate(R.layout.fragment_community, container, false);
+//        final TextView textView = root.findViewById(R.id.text_notifications);
+//        communityViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
+        return view;
+    }
+
+    public void onClickBtnUpload(View v) {
+//        Intent intent = new Intent(CommunityFragment.this, JoinActivity.class);
+//        startActivity(intent);
     }
 }

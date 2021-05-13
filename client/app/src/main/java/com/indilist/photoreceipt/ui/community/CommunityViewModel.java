@@ -10,7 +10,7 @@ public class CommunityViewModel extends ViewModel {
 
     public CommunityViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is community fragment");
     }
 
     public LiveData<String> getText() {
