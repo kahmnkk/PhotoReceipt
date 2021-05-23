@@ -27,7 +27,11 @@ import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.FileCallback;
 import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.filter.Filter;
 import com.otaliastudios.cameraview.filter.Filters;
+import com.otaliastudios.cameraview.filter.MultiFilter;
+import com.otaliastudios.cameraview.filters.BlackAndWhiteFilter;
+import com.otaliastudios.cameraview.filters.GrayscaleFilter;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +53,8 @@ public class CameraFragment extends Fragment {
     private SeekBar BrightBar;
     private TextView Bright_percent;
     private ProcessingFilter filter = new ProcessingFilter();
+    private SeekBar ContrastBar;
+    private TextView Contrast_percent;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +86,7 @@ public class CameraFragment extends Fragment {
                 }
             }
         });
+        //camera.setFilter(filter);
         camera.setFilter(filter);
         Bright_percent = (TextView)root.findViewById(R.id.bright_percent);
         BrightBar = (SeekBar)root.findViewById(R.id.bright_bar);
@@ -90,6 +97,27 @@ public class CameraFragment extends Fragment {
                 DecimalFormat format = new DecimalFormat();
                 format.setMaximumFractionDigits(2);
                 Bright_percent.setText(format.format(i * 0.02f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        Contrast_percent = (TextView)root.findViewById(R.id.contrast_percent);
+        ContrastBar = (SeekBar)root.findViewById(R.id.contrast_bar);
+        ContrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setContrast_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(2);
+                Contrast_percent.setText(format.format(i * 0.02f));
             }
 
             @Override

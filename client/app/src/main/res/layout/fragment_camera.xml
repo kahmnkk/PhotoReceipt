@@ -72,6 +72,34 @@
                 android:progress="50"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:text="선명도"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/contrast_percent"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:text="1.0"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/contrast_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50"/>
+
+        </LinearLayout>
 
 
     </LinearLayout>
