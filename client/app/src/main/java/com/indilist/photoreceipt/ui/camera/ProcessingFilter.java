@@ -15,11 +15,12 @@ public class ProcessingFilter extends BaseFilter
             + "precision mediump float;\n"
             + "uniform samplerExternalOES sTexture;\n"
             + "uniform float saturation_scale;\n"
+            + "uniform float contrast_scale;\n"
             + "uniform float brightness_scale;\n"
-            + "varying vec2" + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
+            + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
             + "void main() {\n"
             + "  vec4 color = texture2D(sTexture, " +DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME + ");\n"
-            + "  gl_FragColor = brightness_scale"
+            + "  gl_FragColor = brightness_scale * color;\n"
             + "}\n";
 
 
@@ -29,8 +30,17 @@ public class ProcessingFilter extends BaseFilter
     public ProcessingFilter(){}
 
     private float brightness = 1.0f;
-    private int brightness_param = 0; // default to 0, 좌우 게이지 조절에 따라 -1 ~ +1 사이 조정. 0이 디폴트
     private int brightness_location = -1;
+
+    public void setBrightness(float brightness) {
+        this.brightness = brightness;
+    }
+
+    public void setBrightness_param(int percent){
+        float param = (float)(percent * 0.02f);
+        if(param == 0)param = 0.1f;
+        setBrightness(param);
+    }
 
     @NonNull
     @Override
