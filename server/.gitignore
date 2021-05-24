@@ -3,3 +3,5 @@ package-lock.json
 
 node_modules/
 devLog/
+
+s3.json

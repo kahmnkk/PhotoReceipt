@@ -69,13 +69,16 @@ class SessionMgr {
     }
 
     addValue(req, key, val) {
-        if (this.session[key] == null) return false;
         req.session[this.sessionKeys[key]] = val;
         return true;
     }
 
     getUid() {
         return this.session[this.sessionKeys.uid];
+    }
+
+    getIdx() {
+        return this.session[this.sessionKeys.idx];
     }
 }
 

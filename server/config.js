@@ -39,6 +39,11 @@ const config = {
             port: 6379,
             db: 0,
         },
+        master: {
+            host: '127.0.0.1',
+            port: 6379,
+            db: 0,
+        },
         user: {
             host: '127.0.0.1',
             port: 6379,

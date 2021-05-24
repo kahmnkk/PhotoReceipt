@@ -44,6 +44,7 @@ class dbMgr extends BaseModel {
 
         this.redis = {
             sessionStore: /** @type {Redis} */ (null),
+            master: /** @type {Redis} */ (null),
             user: /** @type {Redis} */ (null),
             gen: /** @type {Redis} */ (null),
         };

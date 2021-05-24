@@ -20,6 +20,8 @@ const dbMgr = require('@src/database/dbMgr');
 
 // Api Router
 const routerUser = require('@src/api/user/index');
+const routerBoard = require('@src/api/board/index');
+const routerBoardUpload = require('@src/api/board/upload');
 
 class ApiService {
     constructor(options) {
@@ -65,6 +67,8 @@ class ApiService {
         });
 
         this.app.use('/user', routerUser);
+        this.app.use('/board', routerBoard);
+        this.app.use('/board', routerBoardUpload);
 
         this.app.use((req, res, next) => {
             let err = new Error('404 Not Found');
