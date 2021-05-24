@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -80,6 +81,11 @@ public class CameraFragment extends Fragment {
                 if(!filterMenuOn){
                     filterMenuOn = true;
                     filterMenu.setVisibility(View.VISIBLE);
+                    TranslateAnimation ta = new TranslateAnimation(-1000, 0, 0, 0);
+                    ta.setDuration(800);
+                    //ta.setFillAfter(true);
+                    filterMenu.setAnimation(ta);
+
                 }else{
                     filterMenuOn = false;
                     filterMenu.setVisibility(View.INVISIBLE);
