@@ -35,9 +35,6 @@ public class ProcessingFilter extends BaseFilter
             + "}\n";
 
 
-    //Brightness와 Saturation 조정 가능한 Fragment shader...
-    //Saturation은 다른 shader 예제를 더 찾아 보아야 함
-
     public ProcessingFilter(){}
 
     private float brightness = 1.0f;

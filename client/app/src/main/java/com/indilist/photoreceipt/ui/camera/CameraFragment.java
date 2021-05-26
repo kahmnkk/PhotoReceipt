@@ -57,11 +57,7 @@ public class CameraFragment extends Fragment {
     private CameraView camera;
     private ImageButton capture_btn;
     private Button filterBtn;
-    //public String savepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/CameraRec/";
-    public String savepath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath().toString();;
     final int PERMISSIONS_REQUEST_CODE = 1;
-    private File dir;
-    private File saved;
     private LinearLayout filterMenu;
     private Boolean filterMenuOn = false;
     private SeekBar BrightBar;
@@ -151,29 +147,9 @@ public class CameraFragment extends Fragment {
 
 
         camera.setLifecycleOwner(this);
-        //dir = getAbsoluteFile("", getContext());
         camera.addCameraListener(new CameraListener() {
-
-
-
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
-                //super.onPictureTaken(result);
-/*
-                long time = Calendar.getInstance().getTimeInMillis();
-                String filename = "/"+time + ".jpg";
-                File tempfile = new File(savepath, filename);
-                try {
-                    tempfile.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                //      File f = new File(dir, filename);
-          //      File file = makeFile(dir, dir+filename);
-                result.toFile(tempfile, new ready());
-
-*/
                 long time = Calendar.getInstance().getTimeInMillis();
                 String filename = "recipe"+time + ".jpg";
                 ContentValues values = new ContentValues();
@@ -219,18 +195,6 @@ public class CameraFragment extends Fragment {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         requestPermission();
-        File path = getContext().getExternalFilesDir(Environment.DIRECTORY_DCIM);
-        System.out.println(path);
-        File file = new File(path, "photorecipe");
-        try{
-            if(path.exists()){
-                System.out.println("folder exist");
-                file.mkdir();
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 
@@ -243,16 +207,6 @@ public class CameraFragment extends Fragment {
         }else{
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSIONS_REQUEST_CODE);
-            File file = new File(savepath);
-            if(!file.exists()){
-                System.out.println("Dir not Exist");
-                if(file.mkdir()){
-                    System.out.println("dir created");
-                }else{
-                    System.out.println("Dir not created");
-                    System.out.println(savepath);
-                }
-            }
         }
     }
 
@@ -268,13 +222,4 @@ public class CameraFragment extends Fragment {
         }
     }
 
-
-
-    public class ready implements FileCallback{
-
-        @Override
-        public void onFileReady(@Nullable File file) {
-            Toast.makeText(getContext(), "File saved",Toast.LENGTH_LONG).show();
-        }
-    }
 }
