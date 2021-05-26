@@ -210,7 +210,7 @@ public class CameraFragment extends Fragment {
 
 
         camera.setFilter(filter);
-        camera.setFilter(Filters.BLACK_AND_WHITE.newInstance());
+
         return root;
     }
 

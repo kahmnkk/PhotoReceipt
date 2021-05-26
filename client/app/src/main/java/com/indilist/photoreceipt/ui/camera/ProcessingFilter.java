@@ -84,4 +84,15 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(brightness_location, brightness);
         GLES20.glUniform1f(contrast_location, contrast);
     }
+
+    @NonNull
+    @Override
+    protected BaseFilter onCopy() {
+        ProcessingFilter pf = new ProcessingFilter();
+        pf.setBrightness(this.brightness);
+        pf.setContrast(this.contrast);
+        return pf;
+    }
+
+
 }
