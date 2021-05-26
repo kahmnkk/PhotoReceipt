@@ -105,7 +105,7 @@ public class CameraFragment extends Fragment {
                 }
             }
         });
-        camera.setFilter(filter);
+
         Bright_percent = (TextView)root.findViewById(R.id.bright_percent);
         BrightBar = (SeekBar)root.findViewById(R.id.bright_bar);
         BrightBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -153,9 +153,12 @@ public class CameraFragment extends Fragment {
         camera.setLifecycleOwner(this);
         //dir = getAbsoluteFile("", getContext());
         camera.addCameraListener(new CameraListener() {
+
+
+
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
-                super.onPictureTaken(result);
+                //super.onPictureTaken(result);
 /*
                 long time = Calendar.getInstance().getTimeInMillis();
                 String filename = "/"+time + ".jpg";
@@ -183,6 +186,7 @@ public class CameraFragment extends Fragment {
                 try {
                     ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w");
                     FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                    //result.toFile(fos, new ready());
                     fos.write(result.getData());
                     fos.close();
                     values.clear();
@@ -205,7 +209,8 @@ public class CameraFragment extends Fragment {
         });
 
 
-
+        camera.setFilter(filter);
+        camera.setFilter(Filters.BLACK_AND_WHITE.newInstance());
         return root;
     }
 
