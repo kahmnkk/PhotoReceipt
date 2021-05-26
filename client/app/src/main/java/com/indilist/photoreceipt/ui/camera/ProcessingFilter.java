@@ -25,7 +25,7 @@ public class ProcessingFilter extends BaseFilter
             + "     vec3 = hsv(0., 0., Cmax);\n"
             + "     if(Cmax > 0){\n"
             + "         hsv.y = delta/Cmax;\n"
-            + "     }"
+            + "     }\n"
             + "}\n"
             + "void main() {\n"
             + "  vec4 color = texture2D(sTexture, " +DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME + ");\n"
