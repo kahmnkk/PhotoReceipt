@@ -20,13 +20,13 @@ import retrofit2.http.Query;
 public interface ApiService {
     @FormUrlEncoded
     @POST("user/index")
-    Call<JsonObject> userJoin(@Field("router") String router,
+    Call<JsonObject> userIndex(@Field("router") String router,
                               @Field("data") JsonObject data);
 
     @FormUrlEncoded
-    @POST("user/index")
-    Call<JsonObject> userLogin(@Field("router") String router,
-                               @Field("data") JsonObject data);
+    @POST("board/index")
+    Call<JsonObject> boardIndex(@Field("router") String router,
+                                @Field("data") JsonObject data);
 
     @Multipart
     @POST("board/upload")

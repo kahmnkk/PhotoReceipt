@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         requestDTO.addProperty("id", id);
         requestDTO.addProperty("pw", pw);
 
-        Call<JsonObject> call = retrofitClient.apiService.userLogin("login", requestDTO);
+        Call<JsonObject> call = retrofitClient.apiService.userIndex("login", requestDTO);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

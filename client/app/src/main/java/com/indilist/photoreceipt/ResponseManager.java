@@ -13,7 +13,7 @@ public class ResponseManager {
     private final Gson gson = new Gson();
     private final JsonObject responseData;
 
-    ResponseManager(JsonObject responseData) {
+    public ResponseManager(JsonObject responseData) {
         this.responseData = responseData;
     }
 
