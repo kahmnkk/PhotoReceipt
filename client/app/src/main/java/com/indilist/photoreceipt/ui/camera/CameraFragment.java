@@ -65,6 +65,8 @@ public class CameraFragment extends Fragment {
     private ProcessingFilter filter = new ProcessingFilter();
     private SeekBar ContrastBar;
     private TextView Contrast_percent;
+    private SeekBar SaturationBar;
+    private TextView Saturation_percent;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -132,6 +134,28 @@ public class CameraFragment extends Fragment {
                 DecimalFormat format = new DecimalFormat();
                 format.setMaximumFractionDigits(2);
                 Contrast_percent.setText(format.format(i * 0.02f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        Saturation_percent = (TextView)root.findViewById(R.id.saturation_percent);
+        SaturationBar = (SeekBar)root.findViewById(R.id.saturation_bar);
+        SaturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setSaturation_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(2);
+                Saturation_percent.setText(format.format(i * 0.02f));
             }
 
             @Override

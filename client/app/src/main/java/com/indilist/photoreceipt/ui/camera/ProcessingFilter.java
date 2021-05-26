@@ -26,12 +26,29 @@ public class ProcessingFilter extends BaseFilter
             + "     if(Cmax > 0.){\n"
             + "         hsv.y = delta/Cmax;\n"
             + "     }\n"
+            + "     if(Cmax == rgb.r){\n"
+            + "         hsv.x = (rgb.g - rgb.b) / delta;\n"
+            + "     }else if(Cmax == rgb.g){\n"
+            + "         hsv.x = 2. + (rgb.b - rgb.r) / delta;\n"
+            + "     }else{\n"
+            + "         hsv.x = 4. + (rgb.r - rgb.g) / delta;\n"
+            + "     }\n"
+            + "     hsv.x = fract(hsv.x / 6.);\n"
             + "     return hsv;\n"
+            + "}\n"
+            + "vec3 hsvtorgb(vec3 hsv){\n"
+            + "     vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);\n"
+            + "     vec3 P = abs(fract(hsv.xxx + K.xyz) * 6.0 - K.www);\n"
+            + "     return hsv.z * mix(K.xxx, clamp(P - K.xxx, 0.0, 1.0), hsv.y);\n"
             + "}\n"
             + "void main() {\n"
             + "  vec4 color = texture2D(sTexture, " +DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME + ");\n"
             + "  gl_FragColor = brightness_scale * color;\n"
             + "  gl_FragColor = (gl_FragColor - 0.5) * contrast_scale + 0.5;\n"
+            + "  vec3 hsv = rgbtohsv(vec3(gl_FragColor.r, gl_FragColor.g, gl_FragColor.b));\n"
+            + "  hsv.y = hsv.y * saturation_scale;\n"
+            + "  vec3 rgb = hsvtorgb(hsv);\n"
+            + "  gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, gl_FragColor.a);\n"
             + "}\n";
 
 
@@ -39,8 +56,10 @@ public class ProcessingFilter extends BaseFilter
 
     private float brightness = 1.0f;
     private float contrast = 1.0f;
+    private float saturation = 1.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
+    private int saturation_location = -1;
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;
@@ -48,6 +67,10 @@ public class ProcessingFilter extends BaseFilter
 
     public void setContrast(float contrast){
         this.contrast = contrast;
+    }
+
+    public void setSaturation(float saturation){
+        this.saturation = saturation;
     }
 
     public void setBrightness_param(int percent){
@@ -62,6 +85,12 @@ public class ProcessingFilter extends BaseFilter
         setContrast(param);
     }
 
+    public void setSaturation_param(int percent){
+        float param = (float)(percent * 0.02f);
+        if(param == 0)param = 0.1f;
+        setSaturation(param);
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -73,6 +102,7 @@ public class ProcessingFilter extends BaseFilter
         super.onCreate(programHandle);
         brightness_location = GLES20.glGetUniformLocation(programHandle, "brightness_scale");
         contrast_location = GLES20.glGetUniformLocation(programHandle, "contrast_scale");
+        saturation_location = GLES20.glGetUniformLocation(programHandle, "saturation_scale");
     }
 
     @Override
@@ -80,6 +110,7 @@ public class ProcessingFilter extends BaseFilter
         super.onPreDraw(timestampUs, transformMatrix);
         GLES20.glUniform1f(brightness_location, brightness);
         GLES20.glUniform1f(contrast_location, contrast);
+        GLES20.glUniform1f(saturation_location, saturation);
     }
 
     @NonNull
@@ -88,6 +119,7 @@ public class ProcessingFilter extends BaseFilter
         ProcessingFilter pf = new ProcessingFilter();
         pf.setBrightness(this.brightness);
         pf.setContrast(this.contrast);
+        pf.setSaturation(this.saturation);
         return pf;
     }
 

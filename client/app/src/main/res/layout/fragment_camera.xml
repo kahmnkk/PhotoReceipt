@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_marginTop="50dp"
-        android:background="#FFFFFF"
+        android:background="#33FFFFFF"
         android:orientation="vertical"
         android:visibility="invisible">
 
@@ -52,26 +52,30 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:text="밝기"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
+                android:gravity="center_horizontal"
+                android:text="밝기"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/bright_percent"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:text="1.0"
+                android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
+                android:text="1.0"
                 android:textSize="20sp"
-                android:layout_marginTop="10dp"/>
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/bright_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:progress="50"/>
+                android:progress="50" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -80,27 +84,61 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:text="대비"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
+                android:gravity="center_horizontal"
+                android:text="대비"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/contrast_percent"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:text="1.0"
+                android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
+                android:text="1.0"
                 android:textSize="20sp"
-                android:layout_marginTop="10dp"/>
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/contrast_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:progress="50"/>
+                android:progress="50" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="채도"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/saturation_percent"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="1.0"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/saturation_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
