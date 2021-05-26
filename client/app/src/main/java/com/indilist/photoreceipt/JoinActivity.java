@@ -49,7 +49,7 @@ public class JoinActivity extends AppCompatActivity {
         requestDTO.addProperty("pw", pw);
         requestDTO.addProperty("nickname", nickname);
 
-        Call<JsonObject> call = retrofitClient.apiService.userJoin("join", requestDTO);
+        Call<JsonObject> call = retrofitClient.apiService.userIndex("join", requestDTO);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

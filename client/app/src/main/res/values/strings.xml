@@ -15,7 +15,10 @@
     <string name="join_pw_check">비밀번호 확인</string>
 
     <!--  Community Fragment  -->
-    <string name="community_upload">업로드</string>
+    <string name="community_write">글쓰기</string>
+
+    <!--  Upload Activity  -->
+    <string name="upload_upload">업로드</string>
 
     <!--  Error Message  -->
     <string name="err_invalid_account">아이디 또는 비밀번호 오류</string>

@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
-    public void onClickBtnUpload(View v) {
-        Intent intent = new Intent(MainActivity.this, JoinActivity.class);
+    public void onClickBtnWrite(View v) {
+        Intent intent = new Intent(MainActivity.this, UploadActivity.class);
         startActivity(intent);
     }
 }
