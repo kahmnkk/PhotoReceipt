@@ -1,8 +1,15 @@
 package com.indilist.photoreceipt.ui.camera;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,9 +27,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.indilist.photoreceipt.MainActivity;
 import com.indilist.photoreceipt.R;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
@@ -35,7 +44,10 @@ import com.otaliastudios.cameraview.filters.BlackAndWhiteFilter;
 import com.otaliastudios.cameraview.filters.GrayscaleFilter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
@@ -45,7 +57,8 @@ public class CameraFragment extends Fragment {
     private CameraView camera;
     private ImageButton capture_btn;
     private Button filterBtn;
-    public String savepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/CameraRec/";
+    //public String savepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/CameraRec/";
+    public String savepath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath().toString();;
     final int PERMISSIONS_REQUEST_CODE = 1;
     private File dir;
     private File saved;
@@ -92,7 +105,6 @@ public class CameraFragment extends Fragment {
                 }
             }
         });
-        //camera.setFilter(filter);
         camera.setFilter(filter);
         Bright_percent = (TextView)root.findViewById(R.id.bright_percent);
         BrightBar = (SeekBar)root.findViewById(R.id.bright_bar);
@@ -139,16 +151,48 @@ public class CameraFragment extends Fragment {
 
 
         camera.setLifecycleOwner(this);
-        dir = getAbsoluteFile("", getContext());
+        //dir = getAbsoluteFile("", getContext());
         camera.addCameraListener(new CameraListener() {
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
                 super.onPictureTaken(result);
+/*
                 long time = Calendar.getInstance().getTimeInMillis();
-                String filename = "/"+Long.toString(time) + ".jpg";
-                File f = new File(dir, filename);
-                File file = makeFile(dir, dir+filename);
-                result.toFile(file, new ready());
+                String filename = "/"+time + ".jpg";
+                File tempfile = new File(savepath, filename);
+                try {
+                    tempfile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //      File f = new File(dir, filename);
+          //      File file = makeFile(dir, dir+filename);
+                result.toFile(tempfile, new ready());
+
+*/
+                long time = Calendar.getInstance().getTimeInMillis();
+                String filename = "recipe"+time + ".jpg";
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
+                values.put(MediaStore.Images.Media.IS_PENDING, 1);
+                ContentResolver contentResolver = getContext().getContentResolver();
+                Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                Uri item = contentResolver.insert(collection, values);
+                try {
+                    ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w");
+                    FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                    fos.write(result.getData());
+                    fos.close();
+                    values.clear();
+                    values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                    contentResolver.update(item, values, null, null);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -169,35 +213,56 @@ public class CameraFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-
-    }
-
-    private File getAbsoluteFile(String relativePath, Context context){
-        if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())){
-            return new File(context.getExternalFilesDir(null), relativePath);
-        }else{
-            return new File(context.getFilesDir(), relativePath);
-        }
-    }
-
-    private File makeFile(File dir, String filePath){
-        File file = null;
-        boolean issuccess = false;
-        if(dir.isDirectory()){
-            file = new File(filePath);
-            if(file!=null && !file.exists()){
-                Log.e("err", "!file.exists");
-            }try{
-                issuccess = file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
-                Log.e("err","파일생성 여부 = " + issuccess);
+        requestPermission();
+        File path = getContext().getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        System.out.println(path);
+        File file = new File(path, "photorecipe");
+        try{
+            if(path.exists()){
+                System.out.println("folder exist");
+                file.mkdir();
             }
 
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return file;
+
     }
+
+    private void requestPermission(){
+        boolean shouldProviceRationale =
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(shouldProviceRationale){
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_CODE);
+        }else{
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},PERMISSIONS_REQUEST_CODE);
+            File file = new File(savepath);
+            if(!file.exists()){
+                System.out.println("Dir not Exist");
+                if(file.mkdir()){
+                    System.out.println("dir created");
+                }else{
+                    System.out.println("Dir not created");
+                    System.out.println(savepath);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                }
+            }
+            return;
+        }
+    }
+
 
 
     public class ready implements FileCallback{
