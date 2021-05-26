@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="onClickBtnUpload"
     tools:context=".ui.community.CommunityFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -21,11 +20,12 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/btn_upload"
+        android:id="@+id/btn_write"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/purple_200"
-        android:text="@string/community_upload"
+        android:onClick="onClickBtnWrite"
+        android:text="@string/community_write"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
