@@ -48,9 +48,6 @@ async function index(req, res) {
         } else {
             uid = session.getUid();
         }
-        if (uid == null) {
-            throw utils.errorHandling(errors.sessionWrongAccess);
-        }
 
         let resDto = null;
         switch (reqRouter) {

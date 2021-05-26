@@ -43,11 +43,6 @@ async function index(req, res) {
             reqDto = JSON.parse(reqDto);
         }
 
-        const userIdx = session.getIdx();
-        if (userIdx == null) {
-            throw utils.errorHandling(errors.sessionWrongAccess);
-        }
-
         let resDto = null;
         switch (reqRouter) {
             case ROUTERS.getList:
@@ -55,11 +50,11 @@ async function index(req, res) {
                 break;
 
             case ROUTERS.getDetail:
-                resDto = await routerBoard.getDetail(reqDto, userIdx);
+                resDto = await routerBoard.getDetail(reqDto);
                 break;
 
             case ROUTERS.like:
-                resDto = await routerBoard.like(reqDto, userIdx);
+                resDto = await routerBoard.like(reqDto);
                 break;
 
             default:

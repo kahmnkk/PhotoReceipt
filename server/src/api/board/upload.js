@@ -18,6 +18,7 @@ const utils = require('@src/utils/utils');
 
 router.post('/upload', upload.single('image'), async (req, res) => {
     const reqKeys = {
+        userIdx: 'userIdx',
         filter: 'filter',
         text: 'text',
     };
@@ -32,11 +33,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     try {
         let response = {};
 
-        const userIdx = session.getIdx();
-        if (userIdx == null) {
-            throw utils.errorHandling(errors.sessionWrongAccess);
-        }
-
+        const userIdx = Number(body[reqKeys.userIdx]);
         const reqFilter = body[reqKeys.filter];
         const reqText = body[reqKeys.text];
 

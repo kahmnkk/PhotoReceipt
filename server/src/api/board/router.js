@@ -42,9 +42,10 @@ class RouterUser {
         return rtn;
     }
 
-    async getDetail(reqDto, userIdx) {
+    async getDetail(reqDto) {
         const reqKeys = {
             idx: 'idx',
+            userIdx: 'userIdx',
         };
         const resKeys = {
             boardInfo: 'boardInfo',
@@ -57,6 +58,7 @@ class RouterUser {
         }
 
         const idx = reqDto[reqKeys.idx];
+        const userIdx = reqDto[reqKeys.userIdx];
 
         const board = new Board(idx);
         const boardInfo = await board.getBoardInfo(idx);
@@ -80,9 +82,10 @@ class RouterUser {
         return rtn;
     }
 
-    async like(reqDto, userIdx) {
+    async like(reqDto) {
         const reqKeys = {
             idx: 'idx',
+            userIdx: 'userIdx',
         };
         const resKeys = {
             isLiked: 'isLiked',
@@ -94,6 +97,7 @@ class RouterUser {
         }
 
         const idx = reqDto[reqKeys.idx];
+        const userIdx = reqDto[reqKeys.userIdx];
 
         const board = new Board(idx);
         const boardLikeInfo = await board.getBoardLikeInfo(idx);
