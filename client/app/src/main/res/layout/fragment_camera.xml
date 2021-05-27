@@ -183,8 +183,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
-                android:text="1.0"
-                android:textSize="20sp"
+                android:text="EV 0"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatSeekBar

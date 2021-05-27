@@ -360,13 +360,16 @@ public class CameraFragment extends Fragment {
             }
         });
 
-
+        //camera.setFilter(new GaussianFilter());
         camera.setFilter(filter);
         camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
         camera.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
         camera.setAutoFocusMarker(new DefaultAutoFocusMarker());
         camera.setPlaySounds(false);
         camera.setPictureSnapshotMetering(true);
+
+
+
         return root;
     }
 
