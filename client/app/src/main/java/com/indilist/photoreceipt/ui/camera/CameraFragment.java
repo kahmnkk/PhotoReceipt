@@ -20,11 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,10 +37,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.indilist.photoreceipt.MainActivity;
 import com.indilist.photoreceipt.R;
 import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.FileCallback;
 import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.controls.Facing;
+import com.otaliastudios.cameraview.controls.Hdr;
 import com.otaliastudios.cameraview.engine.meter.WhiteBalanceMeter;
 import com.otaliastudios.cameraview.filter.Filter;
 import com.otaliastudios.cameraview.filter.Filters;
@@ -76,6 +80,18 @@ public class CameraFragment extends Fragment {
     private SeekBar SaturationBar;
     private TextView Saturation_percent;
     private ImageButton FacingBtn;
+    private ToggleButton hdrToggle;
+    private Boolean hdr= false;
+    private TextView exposure_percent;
+    private SeekBar exposureBar;
+    private float EXPOSURE_MAX;
+    private float EXPOSURE_MIN;
+    private TextView rboost_percent;
+    private SeekBar rboostBar;
+    private TextView gboost_percent;
+    private SeekBar gboostBar;
+    private TextView bboost_percent;
+    private SeekBar bboostBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -130,7 +146,7 @@ public class CameraFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 filter.setBrightness_param(i);
                 DecimalFormat format = new DecimalFormat();
-                format.setMaximumFractionDigits(2);
+                format.setMaximumFractionDigits(1);
                 Bright_percent.setText(format.format(i * 0.02f));
             }
 
@@ -151,7 +167,7 @@ public class CameraFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 filter.setContrast_param(i);
                 DecimalFormat format = new DecimalFormat();
-                format.setMaximumFractionDigits(2);
+                format.setMaximumFractionDigits(1);
                 Contrast_percent.setText(format.format(i * 0.02f));
             }
 
@@ -173,8 +189,105 @@ public class CameraFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 filter.setSaturation_param(i);
                 DecimalFormat format = new DecimalFormat();
-                format.setMaximumFractionDigits(2);
+                format.setMaximumFractionDigits(1);
                 Saturation_percent.setText(format.format(i * 0.02f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        exposure_percent = (TextView)root.findViewById(R.id.exposureCorrection);
+        exposureBar = (SeekBar)root.findViewById(R.id.exposure_bar);
+        exposureBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                int exposure = i - 50;
+                float amount = EXPOSURE_MAX / 50.f;
+                float result = (float)exposure * amount;
+                camera.setExposureCorrection(result);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(2);
+                String ev;
+                if(result > 0){
+                    ev = "EV +";
+                }else if(result < 0){
+                    ev = "EV ";
+                }else{
+                    ev = "EV ";
+                }
+                exposure_percent.setText(ev + format.format(result));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        rboost_percent = (TextView)root.findViewById(R.id.rboost_percent);
+        rboostBar = (SeekBar)root.findViewById(R.id.rboost_bar);
+        rboostBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setRboost_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(1);
+                rboost_percent.setText(format.format(i * 0.02f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        gboost_percent = (TextView)root.findViewById(R.id.gboost_percent);
+        gboostBar = (SeekBar)root.findViewById(R.id.gboost_bar);
+        gboostBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setGboost_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(1);
+                gboost_percent.setText(format.format(i * 0.02f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        bboost_percent = (TextView)root.findViewById(R.id.bboost_percent);
+        bboostBar = (SeekBar)root.findViewById(R.id.bboost_bar);
+        bboostBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setBboost_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(1);
+                bboost_percent.setText(format.format(i * 0.02f));
             }
 
             @Override
@@ -191,6 +304,13 @@ public class CameraFragment extends Fragment {
 
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
+            @Override
+            public void onCameraOpened(@NonNull CameraOptions options) {
+                super.onCameraOpened(options);
+                EXPOSURE_MAX = options.getExposureCorrectionMaxValue();
+                EXPOSURE_MIN = options.getExposureCorrectionMinValue();
+            }
+
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
                 long time = Calendar.getInstance().getTimeInMillis();
@@ -228,6 +348,18 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        hdrToggle = (ToggleButton)root.findViewById(R.id.hdrtoggle);
+        hdrToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    camera.setHdr(Hdr.ON);
+                }else{
+                    camera.setHdr(Hdr.OFF);
+                }
+            }
+        });
+
 
         camera.setFilter(filter);
         camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
@@ -235,7 +367,6 @@ public class CameraFragment extends Fragment {
         camera.setAutoFocusMarker(new DefaultAutoFocusMarker());
         camera.setPlaySounds(false);
         camera.setPictureSnapshotMetering(true);
-
         return root;
     }
 

@@ -39,10 +39,25 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_gravity="top|right"
-        android:text="Filter"
-        android:textSize="10sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
 
-        />
+        android:layout_marginRight="15dp"
+        android:text="Filter"
+        android:textSize="10sp" />
+
+    <ToggleButton
+        android:id="@+id/hdrtoggle"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginRight="130dp"
+        android:textSize="10sp"
+        android:textOff="HDR:OFF"
+        android:textOn="HDR:ON"
+        android:text="ToggleButton" />
 
     <LinearLayout
         android:id="@+id/filterContainer"
@@ -143,6 +158,130 @@
 
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/saturation_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="노출보정"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/exposureCorrection"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="1.0"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/exposure_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="R+"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/rboost_percent"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="1.0"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/rboost_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="G+"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/gboost_percent"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="1.0"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/gboost_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:progress="50" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="B+"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bboost_percent"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="1.0"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/bboost_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:progress="50" />

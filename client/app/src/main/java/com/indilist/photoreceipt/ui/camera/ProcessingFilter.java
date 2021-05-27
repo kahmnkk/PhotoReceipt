@@ -17,6 +17,9 @@ public class ProcessingFilter extends BaseFilter
             + "uniform float saturation_scale;\n"
             + "uniform float contrast_scale;\n"
             + "uniform float brightness_scale;\n"
+            + "uniform float rboost_scale;\n"
+            + "uniform float gboost_scale;\n"
+            + "uniform float bboost_scale;\n"
             + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
             + "vec3 rgbtohsv(vec3 rgb){\n"
             + "     float Cmax = max(rgb.r, max(rgb.g, rgb.b));\n"
@@ -49,6 +52,15 @@ public class ProcessingFilter extends BaseFilter
             + "  hsv.y = hsv.y * saturation_scale;\n"
             + "  vec3 rgb = hsvtorgb(hsv);\n"
             + "  gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, gl_FragColor.a);\n"
+            + "  if(gl_FragColor.r > 0.6 && gl_FragColor.g < 0.5 && gl_FragColor.b < 0.5){\n"
+            + "     gl_FragColor.r = gl_FragColor.r * rboost_scale;\n"
+            + "  }\n"
+            + "  if(gl_FragColor.g > 0.5 && gl_FragColor.r < 0.5 && gl_FragColor.b < 0.5){\n"
+            + "     gl_FragColor.g = gl_FragColor.g * gboost_scale;\n"
+            + "  }\n"
+            + "  if(gl_FragColor.b > 0.5 && gl_FragColor.r < 0.5 && gl_FragColor.g < 0.5){\n"
+            + "  gl_FragColor.b = gl_FragColor.b * bboost_scale;\n"
+            + "  }\n"
             + "}\n";
 
 
@@ -57,9 +69,15 @@ public class ProcessingFilter extends BaseFilter
     private float brightness = 1.0f;
     private float contrast = 1.0f;
     private float saturation = 1.0f;
+    private float rboost = 1.0f;
+    private float gboost = 1.0f;
+    private float bboost = 1.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
     private int saturation_location = -1;
+    private int rboost_location = -1;
+    private int gboost_location = -1;
+    private int bboost_location = -1;
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;
@@ -71,6 +89,17 @@ public class ProcessingFilter extends BaseFilter
 
     public void setSaturation(float saturation){
         this.saturation = saturation;
+    }
+
+    public void setRboost(float rboost){
+        this.rboost = rboost;
+    }
+
+    public void setGboost(float gboost){
+        this.gboost = gboost;
+    }
+    public void setBboost(float bboost){
+        this.bboost = bboost;
     }
 
     public void setBrightness_param(int percent){
@@ -91,6 +120,22 @@ public class ProcessingFilter extends BaseFilter
         setSaturation(param);
     }
 
+    public void setRboost_param(int percent){
+        float param = (float)(percent * 0.02f);
+        if(param == 0)param = 0.1f;
+        setRboost(param);
+    }
+    public void setGboost_param(int percent){
+        float param = (float)(percent * 0.02f);
+        if(param == 0)param = 0.1f;
+        setGboost(param);
+    }
+    public void setBboost_param(int percent){
+        float param = (float)(percent * 0.02f);
+        if(param == 0)param = 0.1f;
+        setBboost(param);
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -103,6 +148,9 @@ public class ProcessingFilter extends BaseFilter
         brightness_location = GLES20.glGetUniformLocation(programHandle, "brightness_scale");
         contrast_location = GLES20.glGetUniformLocation(programHandle, "contrast_scale");
         saturation_location = GLES20.glGetUniformLocation(programHandle, "saturation_scale");
+        rboost_location = GLES20.glGetUniformLocation(programHandle, "rboost_scale");
+        gboost_location = GLES20.glGetUniformLocation(programHandle, "gboost_scale");
+        bboost_location = GLES20.glGetUniformLocation(programHandle, "bboost_scale");
     }
 
     @Override
@@ -111,6 +159,9 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(brightness_location, brightness);
         GLES20.glUniform1f(contrast_location, contrast);
         GLES20.glUniform1f(saturation_location, saturation);
+        GLES20.glUniform1f(rboost_location, rboost);
+        GLES20.glUniform1f(gboost_location, gboost);
+        GLES20.glUniform1f(bboost_location, bboost);
     }
 
     @NonNull
@@ -120,6 +171,9 @@ public class ProcessingFilter extends BaseFilter
         pf.setBrightness(this.brightness);
         pf.setContrast(this.contrast);
         pf.setSaturation(this.saturation);
+        pf.setRboost(this.rboost);
+        pf.setGboost(this.gboost);
+        pf.setBboost(this.bboost);
         return pf;
     }
 
