@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,11 +38,18 @@ import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.FileCallback;
 import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.controls.Facing;
+import com.otaliastudios.cameraview.engine.meter.WhiteBalanceMeter;
 import com.otaliastudios.cameraview.filter.Filter;
 import com.otaliastudios.cameraview.filter.Filters;
 import com.otaliastudios.cameraview.filter.MultiFilter;
 import com.otaliastudios.cameraview.filters.BlackAndWhiteFilter;
 import com.otaliastudios.cameraview.filters.GrayscaleFilter;
+import com.otaliastudios.cameraview.gesture.Gesture;
+import com.otaliastudios.cameraview.gesture.GestureAction;
+import com.otaliastudios.cameraview.markers.AutoFocusMarker;
+import com.otaliastudios.cameraview.markers.AutoFocusTrigger;
+import com.otaliastudios.cameraview.markers.DefaultAutoFocusMarker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,6 +75,7 @@ public class CameraFragment extends Fragment {
     private TextView Contrast_percent;
     private SeekBar SaturationBar;
     private TextView Saturation_percent;
+    private ImageButton FacingBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -103,7 +112,17 @@ public class CameraFragment extends Fragment {
                 }
             }
         });
-
+        FacingBtn = (ImageButton)root.findViewById(R.id.facing_btn);
+        FacingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(camera.getFacing() == Facing.BACK){
+                    camera.setFacing(Facing.FRONT);
+                }else{
+                    camera.setFacing(Facing.BACK);
+                }
+            }
+        });
         Bright_percent = (TextView)root.findViewById(R.id.bright_percent);
         BrightBar = (SeekBar)root.findViewById(R.id.bright_bar);
         BrightBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -175,9 +194,11 @@ public class CameraFragment extends Fragment {
             @Override
             public void onPictureTaken(@NonNull PictureResult result) {
                 long time = Calendar.getInstance().getTimeInMillis();
+                String foldername = "PhotoRecipe";
                 String filename = "recipe"+time + ".jpg";
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
+                values.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" + foldername);
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
                 values.put(MediaStore.Images.Media.IS_PENDING, 1);
                 ContentResolver contentResolver = getContext().getContentResolver();
@@ -186,7 +207,6 @@ public class CameraFragment extends Fragment {
                 try {
                     ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w");
                     FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
-                    //result.toFile(fos, new ready());
                     fos.write(result.getData());
                     fos.close();
                     values.clear();
@@ -210,6 +230,11 @@ public class CameraFragment extends Fragment {
 
 
         camera.setFilter(filter);
+        camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
+        camera.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS);
+        camera.setAutoFocusMarker(new DefaultAutoFocusMarker());
+        camera.setPlaySounds(false);
+        camera.setPictureSnapshotMetering(true);
 
         return root;
     }
