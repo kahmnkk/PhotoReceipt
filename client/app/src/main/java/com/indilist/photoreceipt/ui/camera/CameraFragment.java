@@ -429,13 +429,14 @@ public class CameraFragment extends Fragment {
 
     private JSONObject getFilterData() throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("brightness", filter.getBrightness());
-        obj.put("contrast", filter.getContrast());
-        obj.put("saturation", filter.getSaturation());
-        obj.put("rboost",filter.getRboost());
-        obj.put("gboost",filter.getGboost());
-        obj.put("bboost", filter.getBboost());
-        obj.put("exposure",exposureStatus);
+        obj.put("brightness", Math.floor(filter.getBrightness()*10)/10.0);
+        obj.put("contrast", Math.floor(filter.getContrast()*10)/10.0);
+        obj.put("saturation", Math.floor(filter.getSaturation() * 10)/10.0);
+        obj.put("rboost",Math.floor(filter.getRboost() * 10)/10.0);
+        obj.put("gboost", Math.floor(filter.getGboost() * 10)/10.0);
+        obj.put("bboost", Math.floor(filter.getBboost() * 10) / 10.0);
+        obj.put("exposure",Math.floor(exposureStatus * 100)/100.0);
+        System.out.println(obj.toString());
         return obj;
     }
 
