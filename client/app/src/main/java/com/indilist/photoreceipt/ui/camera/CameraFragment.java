@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.JsonObject;
+import com.indilist.photoreceipt.DBHelper;
 import com.indilist.photoreceipt.MainActivity;
 import com.indilist.photoreceipt.R;
 import com.otaliastudios.cameraview.CameraListener;
@@ -54,6 +57,9 @@ import com.otaliastudios.cameraview.gesture.GestureAction;
 import com.otaliastudios.cameraview.markers.AutoFocusMarker;
 import com.otaliastudios.cameraview.markers.AutoFocusTrigger;
 import com.otaliastudios.cameraview.markers.DefaultAutoFocusMarker;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -92,6 +98,8 @@ public class CameraFragment extends Fragment {
     private SeekBar gboostBar;
     private TextView bboost_percent;
     private SeekBar bboostBar;
+    private float exposureStatus = 0.f;
+    private DBHelper helper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -211,6 +219,7 @@ public class CameraFragment extends Fragment {
                 int exposure = i - 50;
                 float amount = EXPOSURE_MAX / 50.f;
                 float result = (float)exposure * amount;
+                exposureStatus = result;
                 camera.setExposureCorrection(result);
                 DecimalFormat format = new DecimalFormat();
                 format.setMaximumFractionDigits(2);
@@ -337,6 +346,19 @@ public class CameraFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                SQLiteDatabase db = helper.getWritableDatabase();
+                try {
+                    JSONObject filter = getFilterData();
+                    String jsonToString = filter.toString();
+                    ContentValues contentVal = new ContentValues();
+                    contentVal.put("fname", filename);
+                    contentVal.put("filter", jsonToString);
+                    db.insert("photo", null, contentVal);
+                    db.close();
+                    contentVal.clear();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -367,7 +389,7 @@ public class CameraFragment extends Fragment {
         camera.setAutoFocusMarker(new DefaultAutoFocusMarker());
         camera.setPlaySounds(false);
         camera.setPictureSnapshotMetering(true);
-
+        helper = new DBHelper(getContext());
 
 
         return root;
@@ -403,6 +425,18 @@ public class CameraFragment extends Fragment {
             }
             return;
         }
+    }
+
+    private JSONObject getFilterData() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("brightness", filter.getBrightness());
+        obj.put("contrast", filter.getContrast());
+        obj.put("saturation", filter.getSaturation());
+        obj.put("rboost",filter.getRboost());
+        obj.put("gboost",filter.getGboost());
+        obj.put("bboost", filter.getBboost());
+        obj.put("exposure",exposureStatus);
+        return obj;
     }
 
 }

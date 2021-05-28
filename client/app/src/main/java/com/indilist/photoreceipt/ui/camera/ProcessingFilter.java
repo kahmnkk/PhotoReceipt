@@ -79,7 +79,25 @@ public class ProcessingFilter extends BaseFilter
     private int gboost_location = -1;
     private int bboost_location = -1;
 
+    public float getBrightness(){
+        return brightness;
+    }
+    public float getContrast(){
+        return contrast;
+    }
 
+    public float getSaturation() {
+        return saturation;
+    }
+    public float getRboost(){
+        return rboost;
+    }
+    public float getGboost(){
+        return gboost;
+    }
+    public float getBboost(){
+        return bboost;
+    }
 
     public void setBrightness(float brightness) {
         this.brightness = brightness;
