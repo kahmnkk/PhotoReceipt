@@ -25,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -98,8 +99,12 @@ public class CameraFragment extends Fragment {
     private SeekBar gboostBar;
     private TextView bboost_percent;
     private SeekBar bboostBar;
+    private boolean negative;
+    private TextView negativeStatus;
+    private Switch negativeSwitch;
     private float exposureStatus = 0.f;
     private DBHelper helper;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -310,6 +315,23 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        negativeStatus = (TextView)root.findViewById(R.id.negative_status);
+        negativeSwitch = (Switch)root.findViewById(R.id.negative_switch);
+        negativeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    negativeStatus.setText("ON");
+                    filter.setNegative_param(true);
+                    negative = true;
+                }else{
+                    negativeStatus.setText("OFF");
+                    filter.setNegative_param(false);
+                    negative = false;
+                }
+            }
+        });
+
 
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
@@ -436,7 +458,18 @@ public class CameraFragment extends Fragment {
         obj.put("gboost", Math.floor(filter.getGboost() * 10)/10.0);
         obj.put("bboost", Math.floor(filter.getBboost() * 10) / 10.0);
         obj.put("exposure",Math.floor(exposureStatus * 100)/100.0);
-        System.out.println(obj.toString());
+
+        if(negative){
+            obj.put("negative", 1);
+        }else{
+            obj.put("negative", 0);
+        }
+        if(hdr){
+            obj.put("hdr", 1);
+        }else{
+            obj.put("hdr", 0);
+        }
+
         return obj;
     }
 

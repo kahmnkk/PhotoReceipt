@@ -20,6 +20,7 @@ public class ProcessingFilter extends BaseFilter
             + "uniform float rboost_scale;\n"
             + "uniform float gboost_scale;\n"
             + "uniform float bboost_scale;\n"
+            + "uniform float negative;\n"
             + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
             + "vec3 rgbtohsv(vec3 rgb){\n"
             + "     float Cmax = max(rgb.r, max(rgb.g, rgb.b));\n"
@@ -61,6 +62,9 @@ public class ProcessingFilter extends BaseFilter
             + "  if(gl_FragColor.b > 0.5 && gl_FragColor.r < 0.5 && gl_FragColor.g < 0.5){\n"
             + "  gl_FragColor.b = gl_FragColor.b * bboost_scale;\n"
             + "  }\n"
+            + "  if(negative == 1.0){\n"
+            + "     gl_FragColor = vec4((1.0 - gl_FragColor.r)/1.0, (1.0 - gl_FragColor.g)/1.0, (1.0 - gl_FragColor.b)/1.0, gl_FragColor.a);\n"
+            + "  }\n"
             + "}\n";
 
 
@@ -72,12 +76,18 @@ public class ProcessingFilter extends BaseFilter
     private float rboost = 1.0f;
     private float gboost = 1.0f;
     private float bboost = 1.0f;
+    private float negative = 0.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
     private int saturation_location = -1;
     private int rboost_location = -1;
     private int gboost_location = -1;
     private int bboost_location = -1;
+    private int negative_location = -1;
+
+    public float getNegative(){
+        return negative;
+    }
 
     public float getBrightness(){
         return brightness;
@@ -97,6 +107,10 @@ public class ProcessingFilter extends BaseFilter
     }
     public float getBboost(){
         return bboost;
+    }
+
+    public void setNegative(float negative){
+        this.negative = negative;
     }
 
     public void setBrightness(float brightness) {
@@ -156,6 +170,14 @@ public class ProcessingFilter extends BaseFilter
         setBboost(param);
     }
 
+    public void setNegative_param(boolean bool){
+        if(bool){
+            setNegative(1.0f);
+        }else{
+            setNegative(0.0f);
+        }
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -171,6 +193,7 @@ public class ProcessingFilter extends BaseFilter
         rboost_location = GLES20.glGetUniformLocation(programHandle, "rboost_scale");
         gboost_location = GLES20.glGetUniformLocation(programHandle, "gboost_scale");
         bboost_location = GLES20.glGetUniformLocation(programHandle, "bboost_scale");
+        negative_location = GLES20.glGetUniformLocation(programHandle, "negative");
 
     }
 
@@ -192,6 +215,7 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(rboost_location, rboost);
         GLES20.glUniform1f(gboost_location, gboost);
         GLES20.glUniform1f(bboost_location, bboost);
+        GLES20.glUniform1f(negative_location, negative);
 
     }
 
@@ -207,6 +231,7 @@ public class ProcessingFilter extends BaseFilter
         pf.setRboost(this.rboost);
         pf.setGboost(this.gboost);
         pf.setBboost(this.bboost);
+        pf.setNegative(negative);
         return pf;
     }
 
