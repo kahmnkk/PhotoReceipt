@@ -21,6 +21,7 @@ public class ProcessingFilter extends BaseFilter
             + "uniform float gboost_scale;\n"
             + "uniform float bboost_scale;\n"
             + "uniform float negative;\n"
+            + "uniform float sepia;\n"
             + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
             + "vec3 rgbtohsv(vec3 rgb){\n"
             + "     float Cmax = max(rgb.r, max(rgb.g, rgb.b));\n"
@@ -65,6 +66,11 @@ public class ProcessingFilter extends BaseFilter
             + "  if(negative == 1.0){\n"
             + "     gl_FragColor = vec4((1.0 - gl_FragColor.r)/1.0, (1.0 - gl_FragColor.g)/1.0, (1.0 - gl_FragColor.b)/1.0, gl_FragColor.a);\n"
             + "  }\n"
+            + "  if(sepia == 1.0){\n"
+            + "     gl_FragColor.r = dot(gl_FragColor.rgb, vec3(0.3588, 0.7044, 0.1368));\n"
+            + "     gl_FragColor.g = dot(gl_FragColor.rgb, vec3(0.2990, 0.5870, 0.1140));\n"
+            + "     gl_FragColor.b = dot(gl_FragColor.rgb, vec3(0.2392, 0.4696, 0.0912));\n"
+            + "  }\n"
             + "}\n";
 
 
@@ -77,6 +83,7 @@ public class ProcessingFilter extends BaseFilter
     private float gboost = 1.0f;
     private float bboost = 1.0f;
     private float negative = 0.0f;
+    private float sepia = 0.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
     private int saturation_location = -1;
@@ -84,9 +91,15 @@ public class ProcessingFilter extends BaseFilter
     private int gboost_location = -1;
     private int bboost_location = -1;
     private int negative_location = -1;
+    private int sepia_location = -1;
 
     public float getNegative(){
+
         return negative;
+    }
+
+    public float getSepia(){
+        return sepia;
     }
 
     public float getBrightness(){
@@ -136,6 +149,10 @@ public class ProcessingFilter extends BaseFilter
         this.bboost = bboost;
     }
 
+    public void setSepia(float sepia){
+        this.sepia = sepia;
+    }
+
     public void setBrightness_param(int percent){
         float param = (float)(percent * 0.02f);
         if(param == 0)param = 0.1f;
@@ -178,6 +195,14 @@ public class ProcessingFilter extends BaseFilter
         }
     }
 
+    public void setSepia_param(boolean bool){
+        if(bool){
+            setSepia(1.0f);
+        }else{
+            setSepia(0.0f);
+        }
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -194,7 +219,7 @@ public class ProcessingFilter extends BaseFilter
         gboost_location = GLES20.glGetUniformLocation(programHandle, "gboost_scale");
         bboost_location = GLES20.glGetUniformLocation(programHandle, "bboost_scale");
         negative_location = GLES20.glGetUniformLocation(programHandle, "negative");
-
+        sepia_location = GLES20.glGetUniformLocation(programHandle, "sepia");
     }
 
     @Override
@@ -216,6 +241,7 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(gboost_location, gboost);
         GLES20.glUniform1f(bboost_location, bboost);
         GLES20.glUniform1f(negative_location, negative);
+        GLES20.glUniform1f(sepia_location, sepia);
 
     }
 
@@ -231,7 +257,9 @@ public class ProcessingFilter extends BaseFilter
         pf.setRboost(this.rboost);
         pf.setGboost(this.gboost);
         pf.setBboost(this.bboost);
-        pf.setNegative(negative);
+        pf.setNegative(this.negative);
+        pf.setSepia(this.sepia);
+
         return pf;
     }
 

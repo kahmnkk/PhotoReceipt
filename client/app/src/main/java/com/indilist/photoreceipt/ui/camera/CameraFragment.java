@@ -103,6 +103,9 @@ public class CameraFragment extends Fragment {
     private TextView negativeStatus;
     private Switch negativeSwitch;
     private float exposureStatus = 0.f;
+    private TextView sepiaStatus;
+    private Switch sepiaSwitch;
+    private boolean sepia;
     private DBHelper helper;
 
 
@@ -332,6 +335,23 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        sepiaStatus = (TextView)root.findViewById(R.id.sepia_status);
+        sepiaSwitch = (Switch)root.findViewById(R.id.sepia_switch);
+        sepiaSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    sepiaStatus.setText("ON");
+                    filter.setSepia_param(true);
+                    sepia = true;
+                }else{
+                    sepiaStatus.setText("OFF");
+                    filter.setSepia_param(false);
+                    sepia = false;
+                }
+            }
+        });
+
 
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
@@ -459,6 +479,11 @@ public class CameraFragment extends Fragment {
         obj.put("bboost", Math.floor(filter.getBboost() * 10) / 10.0);
         obj.put("exposure",Math.floor(exposureStatus * 100)/100.0);
 
+        if(sepia){
+            obj.put("sepia", 1);
+        }else{
+            obj.put("sepia", 0);
+        }
         if(negative){
             obj.put("negative", 1);
         }else{
