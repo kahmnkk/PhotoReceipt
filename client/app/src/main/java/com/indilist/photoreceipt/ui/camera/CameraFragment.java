@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -109,7 +110,11 @@ public class CameraFragment extends Fragment {
     private boolean sepia;
     private TextView vignette_percent;
     private SeekBar vignetteBar;
+    private TextView grayscaleStatus;
+    private Switch grayscaleSwitch;
+    private boolean grayscale;
     private DBHelper helper;
+    private ScrollView scrollView;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -130,12 +135,14 @@ public class CameraFragment extends Fragment {
         capture_btn = (ImageButton)root.findViewById(R.id.capture);
         filterMenu = (LinearLayout)root.findViewById(R.id.filterContainer);
         filterBtn = (Button)root.findViewById(R.id.filter_btn);
+        scrollView = (ScrollView)root.findViewById(R.id.scrollcontainer);
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!filterMenuOn){
                     filterMenuOn = true;
                     filterMenu.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.VISIBLE);
                     TranslateAnimation ta = new TranslateAnimation(-1000, 0, 0, 0);
                     ta.setDuration(800);
                     //ta.setFillAfter(true);
@@ -144,6 +151,7 @@ public class CameraFragment extends Fragment {
                 }else{
                     filterMenuOn = false;
                     filterMenu.setVisibility(View.INVISIBLE);
+                    scrollView.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -377,6 +385,23 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        grayscaleStatus = (TextView)root.findViewById(R.id.grayscale_status);
+        grayscaleSwitch = (Switch) root.findViewById(R.id.grayscale_switch);
+        grayscaleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    grayscaleStatus.setText("ON");
+                    filter.setGrayscale_param(true);
+                    grayscale = true;
+                }else{
+                    grayscaleStatus.setText("OFF");
+                    filter.setGrayscale_param(false);
+                    grayscale = false;
+                }
+            }
+        });
+
 
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
@@ -504,6 +529,11 @@ public class CameraFragment extends Fragment {
         obj.put("bboost", Math.floor(filter.getBboost() * 10) / 10.0);
         obj.put("exposure",Math.floor(exposureStatus * 100)/100.0);
         obj.put("vignette", Math.floor(filter.getVignette() * 100)/100.0);
+        if(grayscale){
+            obj.put("grayscale", 1);
+        }else{
+            obj.put("grayscale", 0);
+        }
         if(sepia){
             obj.put("sepia", 1);
         }else{

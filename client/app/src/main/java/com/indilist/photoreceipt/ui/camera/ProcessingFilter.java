@@ -23,6 +23,7 @@ public class ProcessingFilter extends BaseFilter
             + "uniform float vig_scale;\n"
             + "uniform float negative;\n"
             + "uniform float sepia;\n"
+            + "uniform float grayscale;\n"
             + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
             + "vec3 rgbtohsv(vec3 rgb){\n"
             + "     float Cmax = max(rgb.r, max(rgb.g, rgb.b));\n"
@@ -77,7 +78,11 @@ public class ProcessingFilter extends BaseFilter
             + "     float dist = length(position);\n"
             + "     float vig = smoothstep(0.0, 1.0 - vig_scale, dist);\n"
             + "     gl_FragColor.rgb = mix(gl_FragColor.rgb , vec3(0.0, 0.0, 0.0), vig);\n"
-            + "  }"
+            + "  }\n"
+            + "  if(grayscale == 1.0){\n"
+            + "     float c = dot(gl_FragColor, vec4(0.299, 0.587, 0.114, 0));\n"
+            + "     gl_FragColor = vec4(c, c, c, gl_FragColor.a);\n"
+            + "  }\n"
             + "}\n";
 
 
@@ -92,6 +97,7 @@ public class ProcessingFilter extends BaseFilter
     private float negative = 0.0f;
     private float sepia = 0.0f;
     private float vignette = 0.0f;
+    private float grayscale = 0.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
     private int saturation_location = -1;
@@ -101,6 +107,11 @@ public class ProcessingFilter extends BaseFilter
     private int negative_location = -1;
     private int sepia_location = -1;
     private int vignette_location = -1;
+    private int grayscale_location = -1;
+
+    public float getGrayscale(){
+        return grayscale;
+    }
 
     public float getVignette(){
         return vignette;
@@ -110,6 +121,7 @@ public class ProcessingFilter extends BaseFilter
 
         return negative;
     }
+
 
     public float getSepia(){
         return sepia;
@@ -167,6 +179,8 @@ public class ProcessingFilter extends BaseFilter
     public void setSepia(float sepia){
         this.sepia = sepia;
     }
+
+    public void setGrayscale(float grayscale){this.grayscale = grayscale;}
 
     public void setBrightness_param(int percent){
         float param = (float)(percent * 0.02f);
@@ -226,6 +240,14 @@ public class ProcessingFilter extends BaseFilter
         setVignette(param);
     }
 
+    public void setGrayscale_param(boolean bool){
+        if(bool){
+            setGrayscale(1.0f);
+        }else{
+            setGrayscale(0.0f);
+        }
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -244,6 +266,7 @@ public class ProcessingFilter extends BaseFilter
         negative_location = GLES20.glGetUniformLocation(programHandle, "negative");
         sepia_location = GLES20.glGetUniformLocation(programHandle, "sepia");
         vignette_location = GLES20.glGetUniformLocation(programHandle, "vig_scale");
+        grayscale_location = GLES20.glGetUniformLocation(programHandle, "grayscale");
     }
 
     @Override
@@ -267,7 +290,7 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(negative_location, negative);
         GLES20.glUniform1f(sepia_location, sepia);
         GLES20.glUniform1f(vignette_location, vignette);
-
+        GLES20.glUniform1f(grayscale_location, grayscale);
     }
 
 
@@ -285,7 +308,7 @@ public class ProcessingFilter extends BaseFilter
         pf.setNegative(this.negative);
         pf.setSepia(this.sepia);
         pf.setVignette(this.vignette);
-
+        pf.setGrayscale(this.grayscale);
         return pf;
     }
 
