@@ -28,8 +28,8 @@
         android:id="@+id/facing_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
         android:background="@android:color/transparent"
         android:src="@android:drawable/ic_popup_sync" />
@@ -44,6 +44,16 @@
 
         android:layout_marginRight="15dp"
         android:text="Filter"
+        android:textSize="10sp" />
+    <Button
+        android:id="@+id/filterlist_btn"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:text="Preset"
         android:textSize="10sp" />
 
     <ToggleButton
@@ -62,14 +72,14 @@
     <ScrollView
         android:id="@+id/scrollcontainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
+        android:layout_marginTop="65dp"
         android:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/filterContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
             android:background="#33FFFFFF"
             android:orientation="vertical"
             android:visibility="invisible">
@@ -447,6 +457,47 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addPreset"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.5"
+                    android:text="Save Preset" />
+
+                <Button
+                    android:id="@+id/initFilter"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.5"
+                    android:text="Reset" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/filterlist"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="65dp"
+        android:visibility="invisible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#33FFFFFF"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filterlistview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
 

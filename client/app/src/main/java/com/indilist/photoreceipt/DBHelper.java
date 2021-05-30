@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table photo (_idx integer primary key autoincrement, fname text, filter text);");
-        db.execSQL("create table filters (_idx integer primary key autoincrement, filter text);");
+        db.execSQL("create table filters (_idx integer primary key autoincrement, filter text, filtername text);");
     }
 
     @Override
