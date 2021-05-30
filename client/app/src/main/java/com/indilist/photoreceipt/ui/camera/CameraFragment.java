@@ -53,6 +53,7 @@ import com.otaliastudios.cameraview.filter.Filters;
 import com.otaliastudios.cameraview.filter.MultiFilter;
 import com.otaliastudios.cameraview.filters.BlackAndWhiteFilter;
 import com.otaliastudios.cameraview.filters.GrayscaleFilter;
+import com.otaliastudios.cameraview.filters.VignetteFilter;
 import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 import com.otaliastudios.cameraview.markers.AutoFocusMarker;
@@ -106,6 +107,8 @@ public class CameraFragment extends Fragment {
     private TextView sepiaStatus;
     private Switch sepiaSwitch;
     private boolean sepia;
+    private TextView vignette_percent;
+    private SeekBar vignetteBar;
     private DBHelper helper;
 
 
@@ -352,6 +355,28 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        vignette_percent = (TextView)root.findViewById(R.id.vignette_percent);
+        vignetteBar = (SeekBar)root.findViewById(R.id.vignette_bar);
+        vignetteBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                filter.setVignette_param(i);
+                DecimalFormat format = new DecimalFormat();
+                format.setMaximumFractionDigits(2);
+                vignette_percent.setText(format.format(i * 0.01f));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
@@ -423,7 +448,7 @@ public class CameraFragment extends Fragment {
                 }
             }
         });
-
+        //camera.setFilter(new VignetteFilter());
         //camera.setFilter(new GaussianFilter());
         camera.setFilter(filter);
         camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
@@ -478,7 +503,7 @@ public class CameraFragment extends Fragment {
         obj.put("gboost", Math.floor(filter.getGboost() * 10)/10.0);
         obj.put("bboost", Math.floor(filter.getBboost() * 10) / 10.0);
         obj.put("exposure",Math.floor(exposureStatus * 100)/100.0);
-
+        obj.put("vignette", Math.floor(filter.getVignette() * 100)/100.0);
         if(sepia){
             obj.put("sepia", 1);
         }else{

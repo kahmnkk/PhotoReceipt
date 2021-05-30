@@ -20,6 +20,7 @@ public class ProcessingFilter extends BaseFilter
             + "uniform float rboost_scale;\n"
             + "uniform float gboost_scale;\n"
             + "uniform float bboost_scale;\n"
+            + "uniform float vig_scale;\n"
             + "uniform float negative;\n"
             + "uniform float sepia;\n"
             + "varying vec2 " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME+";\n"
@@ -71,6 +72,12 @@ public class ProcessingFilter extends BaseFilter
             + "     gl_FragColor.g = dot(gl_FragColor.rgb, vec3(0.2990, 0.5870, 0.1140));\n"
             + "     gl_FragColor.b = dot(gl_FragColor.rgb, vec3(0.2392, 0.4696, 0.0912));\n"
             + "  }\n"
+            + "  if(vig_scale > 0.0){\n"
+            + "     vec2 position = " + DEFAULT_FRAGMENT_TEXTURE_COORDINATE_NAME + "- vec2(0.5);\n"
+            + "     float dist = length(position);\n"
+            + "     float vig = smoothstep(0.0, 1.0 - vig_scale, dist);\n"
+            + "     gl_FragColor.rgb = mix(gl_FragColor.rgb , vec3(0.0, 0.0, 0.0), vig);\n"
+            + "  }"
             + "}\n";
 
 
@@ -84,6 +91,7 @@ public class ProcessingFilter extends BaseFilter
     private float bboost = 1.0f;
     private float negative = 0.0f;
     private float sepia = 0.0f;
+    private float vignette = 0.0f;
     private int brightness_location = -1;
     private int contrast_location = -1;
     private int saturation_location = -1;
@@ -92,6 +100,11 @@ public class ProcessingFilter extends BaseFilter
     private int bboost_location = -1;
     private int negative_location = -1;
     private int sepia_location = -1;
+    private int vignette_location = -1;
+
+    public float getVignette(){
+        return vignette;
+    }
 
     public float getNegative(){
 
@@ -121,6 +134,8 @@ public class ProcessingFilter extends BaseFilter
     public float getBboost(){
         return bboost;
     }
+
+    public void setVignette(float vignette){this.vignette = vignette;}
 
     public void setNegative(float negative){
         this.negative = negative;
@@ -203,6 +218,14 @@ public class ProcessingFilter extends BaseFilter
         }
     }
 
+    public void setVignette_param(int percent){
+        float param = (float)(percent * 0.01f);
+        if(param == 1.0f){
+            param = 0.999f;
+        }
+        setVignette(param);
+    }
+
     @NonNull
     @Override
     public String getFragmentShader() {
@@ -220,6 +243,7 @@ public class ProcessingFilter extends BaseFilter
         bboost_location = GLES20.glGetUniformLocation(programHandle, "bboost_scale");
         negative_location = GLES20.glGetUniformLocation(programHandle, "negative");
         sepia_location = GLES20.glGetUniformLocation(programHandle, "sepia");
+        vignette_location = GLES20.glGetUniformLocation(programHandle, "vig_scale");
     }
 
     @Override
@@ -242,6 +266,7 @@ public class ProcessingFilter extends BaseFilter
         GLES20.glUniform1f(bboost_location, bboost);
         GLES20.glUniform1f(negative_location, negative);
         GLES20.glUniform1f(sepia_location, sepia);
+        GLES20.glUniform1f(vignette_location, vignette);
 
     }
 
@@ -259,6 +284,7 @@ public class ProcessingFilter extends BaseFilter
         pf.setBboost(this.bboost);
         pf.setNegative(this.negative);
         pf.setSepia(this.sepia);
+        pf.setVignette(this.vignette);
 
         return pf;
     }
