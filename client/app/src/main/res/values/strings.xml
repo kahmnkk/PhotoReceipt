@@ -19,6 +19,12 @@
 
     <!--  Upload Activity  -->
     <string name="upload_upload">업로드</string>
+    <string name="upload_text">내용</string>
+
+    <!--  Board Activity  -->
+    <string name="board_owner">글쓴이</string>
+    <string name="board_filter">필터 정보</string>
+    <string name="board_filter_save">필터 저장</string>
 
     <!--  Error Message  -->
     <string name="err_invalid_account">아이디 또는 비밀번호 오류</string>

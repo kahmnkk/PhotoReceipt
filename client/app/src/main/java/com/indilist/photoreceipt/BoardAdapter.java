@@ -39,7 +39,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.MyViewHolder
     @Override
     public void onItemClick(int position) {
         BoardListDTO item = listItems.get(position);
-        Intent intent = new Intent(context.getApplicationContext(), UploadActivity.class);
+        Intent intent = new Intent(context.getApplicationContext(), BoardActivity.class);
         intent.putExtra("BOARD_IDX", item.getIdx());
         context.getApplicationContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }

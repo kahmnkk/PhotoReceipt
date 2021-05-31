@@ -51,13 +51,6 @@ public class CommunityFragment extends Fragment {
         communityViewModel =
                 new ViewModelProvider(this).get(CommunityViewModel.class);
         View view = inflater.inflate(R.layout.fragment_community, container, false);
-//        final TextView textView = root.findViewById(R.id.text_notifications);
-//        communityViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
@@ -84,7 +77,6 @@ public class CommunityFragment extends Fragment {
 
                         recyclerView.setAdapter(new BoardAdapter(dataList, getActivity()));
                         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
-                        recyclerView.setItemAnimator(new DefaultItemAnimator());
                     } else {
                         responseManager.errorHandler(getActivity().getApplicationContext());
                     }
