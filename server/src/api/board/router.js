@@ -7,6 +7,7 @@ const utils = require('@src/utils/utils');
 
 // Model
 const Board = require('@src/model/board');
+const User = require('@src/model/user');
 
 class RouterUser {
     constructor() {}
@@ -49,6 +50,7 @@ class RouterUser {
         };
         const resKeys = {
             boardInfo: 'boardInfo',
+            ownerInfo: 'ownerInfo',
             isLiked: 'isLiked',
         };
         let rtn = {};
@@ -76,7 +78,11 @@ class RouterUser {
             }
         }
 
+        const user = new User(boardInfo.owner);
+        const ownerInfo = await user.getUserInfo();
+
         rtn[resKeys.boardInfo] = boardInfo;
+        rtn[resKeys.ownerInfo] = ownerInfo;
         rtn[resKeys.isLiked] = isLiked;
 
         return rtn;
@@ -89,6 +95,7 @@ class RouterUser {
         };
         const resKeys = {
             isLiked: 'isLiked',
+            likeCount: 'likeCount',
         };
         let rtn = {};
 
@@ -112,17 +119,22 @@ class RouterUser {
             }
         }
 
+        const likeCount = await board.getBoardLikeCount();
+        let rtnLikeCount = likeCount;
         let likeStatus = 0;
         if (isLiked == true) {
             likeStatus = board.likeStatus.unlike;
+            rtnLikeCount--;
         } else {
             likeStatus = board.likeStatus.like;
+            rtnLikeCount++;
         }
-        const createResult = await board.createBoardLike(userIdx, likeStatus, await board.getBoardLikeCount());
+        const createResult = await board.createBoardLike(userIdx, likeStatus, likeCount);
 
         await dbMgr.set(dbMgr.mysqlConn.master, createResult.query);
 
         rtn[resKeys.isLiked] = !isLiked;
+        rtn[resKeys.likeCount] = rtnLikeCount;
 
         return rtn;
     }
