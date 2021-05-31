@@ -4,21 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -33,9 +40,11 @@ public class UploadActivity extends AppCompatActivity {
     private final Gson gson = new Gson();
     private static final int REQUEST_GALLERY = 1111;
 
+    private DBHelper helper;
     private Uri imageURI;
-    private String imagePath;
+    private String imagePath, filterObj;
     private ImageView imageView;
+    private EditText editText;
     private Long idx;
 
     @Override
@@ -46,7 +55,10 @@ public class UploadActivity extends AppCompatActivity {
         SharedPreferences userInfo = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
         idx = userInfo.getLong("USER_IDX", 0);
 
+        helper = new DBHelper(this);
+
         imageView = (ImageView) findViewById(R.id.img_gallery);
+        editText = (EditText) findViewById(R.id.upload_editText);
     }
 
     public void onClickGallery(View view) {
@@ -73,6 +85,16 @@ public class UploadActivity extends AppCompatActivity {
                     imageURI = data.getData(); // 이미지 경로
                     imageView.setImageURI(imageURI);
                     imagePath = getRealPathFromURI(imageURI, this);
+
+                    String[] imgPathArr = imagePath.split("/");
+                    String imageFileName = imgPathArr[imgPathArr.length - 1];
+
+                    SQLiteDatabase db = helper.getReadableDatabase();
+                    String sql = "SELECT * FROM photo WHERE fname = '" + imageFileName + "';";
+                    Cursor cursor = db.rawQuery(sql, null);
+                    while(cursor.moveToNext()) {
+                        filterObj = cursor.getString(2);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -104,10 +126,9 @@ public class UploadActivity extends AppCompatActivity {
 
             RequestBody userIdxReq = RequestBody.create(MediaType.parse("text/plain"), idx.toString());
 
-            JsonObject filterObj = new JsonObject();
-            RequestBody filterReq = RequestBody.create(MediaType.parse("text/plain"), filterObj.toString());
+            RequestBody filterReq = RequestBody.create(MediaType.parse("text/plain"), filterObj);
 
-            RequestBody textReq = RequestBody.create(MediaType.parse("text/plain"), "ㅇ아아ㅏㅏ아ㅏ");
+            RequestBody textReq = RequestBody.create(MediaType.parse("text/plain"), editText.getText().toString());
 
             RetrofitClient retrofitClient = new RetrofitClient();
             Call<JsonObject> call = retrofitClient.apiService.communityUpload(imgToUpload, userIdxReq, filterReq, textReq);

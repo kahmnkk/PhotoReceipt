@@ -19,6 +19,23 @@
         app:layout_constraintVertical_bias="0.256"
         app:srcCompat="@drawable/image_gallery" />
 
+    <EditText
+        android:id="@+id/upload_editText"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="start"
+        android:hint="@string/upload_text"
+        android:textColorHint="#808080"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_gallery"
+        app:layout_constraintVertical_bias="0.21" />
+
     <Button
         android:id="@+id/btn_upload"
         android:layout_width="300dp"
@@ -29,5 +46,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_gallery" />
+        app:layout_constraintTop_toBottomOf="@+id/upload_editText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
