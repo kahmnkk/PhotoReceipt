@@ -1,19 +1,26 @@
 package com.indilist.photoreceipt;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +35,9 @@ import com.indilist.photoreceipt.DTO.BoardListDTO;
 import com.indilist.photoreceipt.DTO.LoginDTO;
 import com.indilist.photoreceipt.DTO.ResponseListDTO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,12 +49,14 @@ import retrofit2.Response;
 
 public class BoardActivity extends AppCompatActivity {
     private final Gson gson = new Gson();
+    private DBHelper helper;
 
     private ImageView boardImg, iconLike;
     private TextView ownerText, likeCountText, boardText;
     private RecyclerView recyclerView;
 
     private Long boardIdx, userIdx;
+    private JsonObject filterObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,8 @@ public class BoardActivity extends AppCompatActivity {
         likeCountText = (TextView) findViewById(R.id.board_like_count);
         boardText = (TextView) findViewById(R.id.board_text);
         recyclerView = (RecyclerView) findViewById(R.id.filter_recyclerView);
+
+        helper = new DBHelper(this);
     }
 
     private void apiGetDetail() {
@@ -111,7 +125,7 @@ public class BoardActivity extends AppCompatActivity {
         likeCountText.setText("좋아요 " + boardListDTO.getLike());
         boardText.setText(boardListDTO.getText());
 
-        JsonObject filterObj = boardListDTO.getFilter();
+        filterObj = boardListDTO.getFilter();
         List<BoardFilterDTO> filterList = new ArrayList<>();
         Iterator iter = filterObj.keySet().iterator();
         while(iter.hasNext()) {
@@ -153,7 +167,9 @@ public class BoardActivity extends AppCompatActivity {
                 case "exposure":
                     value = (value - 50) * 0.04;
                     name = "노출보정";
-                    tempValue = value + "";
+                    if (value > 0) tempValue = "EV +" + value;
+                    else if(value == 0) tempValue = "EV 0";
+                    else tempValue = "EV " + value;
                     break;
                 case "vignette":
                     value *= 0.01;
@@ -166,7 +182,7 @@ public class BoardActivity extends AppCompatActivity {
                     else tempValue = "off";
                     break;
                 case "sepia":
-                    name = "세피아";
+                    name = "Sepia";
                     if (value == 1) tempValue = "on";
                     else tempValue = "off";
                     break;
@@ -176,7 +192,7 @@ public class BoardActivity extends AppCompatActivity {
                     else tempValue = "off";
                     break;
                 case "hdr":
-                    name = "hdr";
+                    name = "HDR";
                     if (value == 1) tempValue = "on";
                     else tempValue = "off";
                     break;
@@ -244,5 +260,48 @@ public class BoardActivity extends AppCompatActivity {
         }
 
         likeCountText.setText("좋아요 " + boardLikeDTO.getLikeCount());
+    }
+
+    public void onClickSaveFilter(View view) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("필터 저장");
+
+        final EditText editText = new EditText(this);
+        final ConstraintLayout container = new ConstraintLayout(this);
+        final ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.alert_dialog_internal_margin);
+        params.rightMargin =getResources().getDimensionPixelSize(R.dimen.alert_dialog_internal_margin);
+        editText.setLayoutParams(params);
+        editText.setHint("필터 이름 입력");
+        editText.setHintTextColor(getResources().getColor(R.color.gray));
+        container.addView(editText);
+
+        alertDialog.setView(container);
+        alertDialog.setPositiveButton("저장",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String fname = editText.getText().toString();
+                        if(fname.equals("")) {
+                            Toast.makeText(BoardActivity.this, "필터 이름을 입력해주세요",Toast.LENGTH_SHORT).show();
+                        } else{
+                            SQLiteDatabase db = helper.getWritableDatabase();
+                            ContentValues cv = new ContentValues();
+                            cv.put("filter", filterObj.toString());
+                            cv.put("filtername", fname);
+                            db.insert("filters", null, cv);
+                            db.close();
+                            Toast.makeText(BoardActivity.this, "필터가 저장되었습니다",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        alertDialog.setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 }

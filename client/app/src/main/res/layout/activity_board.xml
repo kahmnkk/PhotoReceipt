@@ -118,9 +118,10 @@
                 android:id="@+id/btn_filter_download"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/purple_200"
                 android:layout_gravity="center"
                 android:layout_marginVertical="10dp"
+                android:backgroundTint="@color/purple_200"
+                android:onClick="onClickSaveFilter"
                 android:text="@string/board_filter_save" />
 
         </LinearLayout>
