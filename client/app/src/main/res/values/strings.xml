@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoReceipt</string>
+    <string name="app_name">PhotoRecipe</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_camera">Camera</string>
     <string name="title_community">Community</string>
