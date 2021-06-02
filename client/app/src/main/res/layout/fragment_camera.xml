@@ -21,8 +21,10 @@
         android:layout_height="80dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="100dp"
+        android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/camera_btn" />
+        android:src="@drawable/camera_btn"
+        android:tint="#FFBB86FC" />
 
     <ImageButton
         android:id="@+id/facing_btn"
