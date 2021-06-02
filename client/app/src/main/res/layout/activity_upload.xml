@@ -13,17 +13,18 @@
         android:onClick="onClickGallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.256"
+        app:layout_constraintVertical_bias="0.084"
         app:srcCompat="@drawable/image_gallery" />
 
     <EditText
         android:id="@+id/upload_editText"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:background="@null"
+        android:padding="10dp"
+        android:background="#f2f2f2"
         android:ems="10"
         android:gravity="start"
         android:hint="@string/upload_text"

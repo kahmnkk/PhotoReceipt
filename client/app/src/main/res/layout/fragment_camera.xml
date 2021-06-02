@@ -72,16 +72,17 @@
     <ScrollView
         android:id="@+id/scrollcontainer"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="480dp"
         android:layout_marginTop="65dp"
         android:visibility="invisible">
 
         <LinearLayout
             android:id="@+id/filterContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#33FFFFFF"
             android:orientation="vertical"
+            android:paddingHorizontal="10dp"
             android:visibility="invisible">
 
             <LinearLayout
@@ -467,6 +468,7 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_weight="0.5"
+                    android:layout_marginHorizontal="5dp"
                     android:text="Save Preset" />
 
                 <Button
@@ -474,6 +476,7 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_weight="0.5"
+                    android:layout_marginHorizontal="5dp"
                     android:text="Reset" />
 
             </LinearLayout>
@@ -484,7 +487,7 @@
     <ScrollView
         android:id="@+id/filterlist"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="480dp"
         android:layout_marginTop="65dp"
         android:visibility="invisible">
 
@@ -492,6 +495,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#33FFFFFF"
+            android:paddingHorizontal="10dp"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
