@@ -1,6 +1,7 @@
 const config = {
     dev: true,
     baseUrl: '127.0.0.1',
+    cdnUrl: 'https://d2cv5nvmotjsag.cloudfront.net/',
     port: {
         api: 8080,
     },

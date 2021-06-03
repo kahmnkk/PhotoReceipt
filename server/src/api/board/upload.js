@@ -6,6 +6,7 @@ const router = express.Router();
 const upload = require('@src/utils/multer');
 const errors = require('@src/errors');
 const dbMgr = require('@src/database/dbMgr');
+const config = require('@root/config');
 
 // Api
 const SessionMgr = require('@src/api/sessionMgr');
@@ -26,7 +27,10 @@ router.post('/upload', upload.single('image'), async (req, res) => {
         result: 'result',
     };
 
-    const imageLink = req.file.location;
+    const link = req.file.location;
+    let linkArr = link.split('/');
+    let imageFileName = linkArr[linkArr.length - 1];
+    const imageLink = config.cdnUrl + imageFileName;
 
     const session = new SessionMgr(req, res);
     const body = session.body;
